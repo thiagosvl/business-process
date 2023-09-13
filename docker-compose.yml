@@ -1,14 +1,29 @@
 version: '3'
+
 services:
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: business_process
+    volumes:
+      - mysql-data:/var/lib/mysql
+
   backend:
-    build: 
+    build:
       context: ./backend
+      dockerfile: Dockerfile.dev
     ports:
       - "3001:3001"
+    depends_on:
+      - db
+
   frontend:
     build:
       context: ./frontend
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
-    depends_on:
-      - backend
+
+volumes:
+  mysql-data:
